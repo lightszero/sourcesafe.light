@@ -147,8 +147,7 @@ namespace corelib
                             return;
                         case "rpc"://Get返回二进制格式
                             strreturn = _http_cmd_rpc(req);
-                            return;
-
+                            break;
                         case "play":
                             strreturn = _http_cmd_play(req);
                             break;
@@ -191,7 +190,7 @@ namespace corelib
 <a>FORALL 02 ?c=login&g=[gamename]&u=[username]&p=[passwod]</a><br/>
 <a>                  login for a game</a>        <br/>            
 <hr/> 
-<a>RPC  ?c=rpc&code=""""<a><br/>
+<a>RPC  ?c=rpc&s=""""<a><br/>
 <a>                  call rpc to sync the version</a><br/>           
 <hr/>
 <a>GET  ?c=get&f=""""&v=""""&p=1or0</a><br/>
@@ -204,13 +203,15 @@ namespace corelib
         {//获取GameList
             MyJson.JsonNode_Object map = new MyJson.JsonNode_Object();
             map.SetDictValue("status", 0);
-            map["list"] = new MyJson.JsonNode_Object();
-            var dict = map["list"].asDict();
+            map["list"] = new MyJson.JsonNode_Array();
+            var list = map["list"].AsList();
             foreach (var g in config.games)
             {
-                map["list"].SetDictValue("name", g.name);
-                map["list"].SetDictValue("desc", g.desc);
-                map["list"].SetDictValue("admin", g.admin);
+                MyJson.JsonNode_Object gameitem = new MyJson.JsonNode_Object();
+                gameitem.SetDictValue("name", g.name);
+                gameitem.SetDictValue("desc", g.desc);
+                gameitem.SetDictValue("admin", g.admin);
+                list.Add(gameitem);
             }
 
             return map.ToString();

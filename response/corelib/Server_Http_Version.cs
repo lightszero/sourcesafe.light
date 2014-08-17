@@ -25,16 +25,15 @@ namespace corelib
 
             public static VersionGroup Load(string name, string path)
             {
-                System.Xml.Serialization.XmlSerializer xmls =new System.Xml.Serialization.XmlSerializer(typeof(VersionGroup));
-                 VersionGroup group=null;
+                System.Xml.Serialization.XmlSerializer xmls = new System.Xml.Serialization.XmlSerializer(typeof(VersionGroup));
+                VersionGroup group = null;
                 try
-                    
                 {
-                  
-                using(var s=System.IO.File.OpenRead(path+"/vergroup.xml"))
-                {
-                    group = xmls.Deserialize(s) as VersionGroup;
-                }
+
+                    using (var s = System.IO.File.OpenRead(path + "/vergroup.xml"))
+                    {
+                        group = xmls.Deserialize(s) as VersionGroup;
+                    }
                 }
                 catch
                 {
@@ -89,7 +88,53 @@ namespace corelib
         }
         string _http_cmd_rpc(System.Net.HttpListenerContext req)
         {
-            return "";
+            
+            string qu = req.Request.Url.Query.Substring(1);
+            string[] sp = qu.Split(new char[] { '?', '&', '=' });
+
+            var code="";
+            for(int i=0;i<sp.Length/2;i++)
+            {
+                if(sp[i*2]=="s")
+                {
+                    code = Uri.UnescapeDataString(sp[i * 2 + 1]);
+                    break;
+                }
+            }
+            string s = code;
+            try
+            {
+                var tt = envRPC.ParserToken(s);
+                var ee = envRPC.Expr_CompilerToken(tt, true);
+                var value = envRPC.Expr_Execute(ee);
+                MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+                obj.SetDictValue("status", 0);
+                if (value == null)
+                {
+
+                    obj.SetDictValue("rt", "null");
+                    obj.SetDictValue("rv", "null");
+                }
+                else
+                {
+                    if (value.type != null)
+                        obj.SetDictValue("rt", value.type.ToString());
+                    else
+                        obj.SetDictValue("rt", "null");
+                    if (value.value != null)
+                        obj.SetDictValue("rv", value.value.ToString());
+                    else
+                        obj.SetDictValue("rv", "null");
+                }
+                return obj.ToString(); ;
+            }
+            catch (Exception err)
+            {
+                MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+                obj.SetDictValue("status", -1010);
+                obj.SetDictValue("msg", err.ToString());
+                return obj.ToString(); ;
+            }
         }
         CSLE.CLS_Environment envRPC = null;
         void _init_ScriptRPC()
@@ -101,14 +146,14 @@ namespace corelib
 
         }
         delegate string RPC(string token);
-        delegate string RPC<T>(string token,T _param);
+        delegate string RPC<T>(string token, T _param);
         delegate string RPC<T1, T2>(string token, T1 _p1, T2 _p2);
-        delegate string RPC<T1, T2,T3>(string token, T1 _p1, T2 _p2,T3 _p3);
-        delegate string RPC<T1, T2,T3,T4>(string token, T1 _p1, T2 _p2,T3 _p3,T4 _p4);
+        delegate string RPC<T1, T2, T3>(string token, T1 _p1, T2 _p2, T3 _p3);
+        delegate string RPC<T1, T2, T3, T4>(string token, T1 _p1, T2 _p2, T3 _p3, T4 _p4);
         string _rpc_help(string token)
         {
-            return "help.";
+            return "help."+token;
         }
-    
+
     }
 }
