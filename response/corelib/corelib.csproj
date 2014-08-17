@@ -45,6 +45,8 @@
     <Compile Include="myjson\MyJson.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Server_Http_Version.cs" />
+    <Compile Include="Server_Http_Download.cs" />
     <Compile Include="Server_Http.cs" />
     <Compile Include="Server_Script.cs" />
   </ItemGroup>
