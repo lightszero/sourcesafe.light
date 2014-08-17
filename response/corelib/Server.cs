@@ -42,6 +42,7 @@ namespace corelib
 
             _http_init(url);
             _init_Script();
+            _init_ScriptRPC();
             this.logger.Log("type help() for more .");
         }
         public void Call(string cmd)

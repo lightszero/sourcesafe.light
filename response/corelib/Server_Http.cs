@@ -142,8 +142,11 @@ namespace corelib
                     string strreturn = null;//统一json返回串
                     switch (req.Request.QueryString["c"])
                     {
-                        case "res_get"://Get返回二进制格式
-                            _http_cmdres_get(req);
+                        case "get"://Get返回二进制格式
+                            _http_cmd_get(req);
+                            return;
+                        case "rpc"://Get返回二进制格式
+                            strreturn = _http_cmd_rpc(req);
                             return;
 
                         case "play":
@@ -155,18 +158,7 @@ namespace corelib
                         case "login":
                             strreturn = _http_cmd_login(req);
                             break;
-                        case "res_info"://信息
-                            strreturn = _http_cmdres_info(req);
-                            break;
-                        case "res_op"://操作
-                            strreturn = _http_cmdres_op(req);
-                            break;
-                        case "ver_begin"://信息
-                            strreturn = _http_cmdver_begin(req);
-                            break;
-                        case "ver_end"://操作
-                            strreturn = _http_cmdver_end(req);
-                            break;
+
                         default:
                             _http_cmd_help(req);//Help返回html
                             return;
@@ -196,29 +188,14 @@ namespace corelib
 <hr/>
 <a>FORALL 01 ?c=ping test that if this server is a sourcesafe.light server or not.</a><br/>
 <hr/>
-<a>Artist 00 ?c=login&g=[gamename]&u=[username]&p=[passwod]</a><br/>
+<a>FORALL 02 ?c=login&g=[gamename]&u=[username]&p=[passwod]</a><br/>
 <a>                  login for a game</a>        <br/>            
 <hr/> 
-Artist 01 res_info 获取资源信息<br/>
-?c=res_list&t=token&v=<br/>
-list ress in game,v=0 for nearest version,v=other for specfil version<br/>             
+<a>RPC  ?c=rpc&code=""""<a><br/>
+<a>                  call rpc to sync the version</a><br/>           
 <hr/>
-Artist 02 res_get 获取资源<br/>
-?c=res_list&t=token&v=<br/>
-list ress in game,v=0 for nearest version,v=other for specfil version<br/>             
-<hr/>
-Artist 03 ver_begin 获取并锁定资源<br/>
-?c=res_list&t=token&v=<br/>
-list ress in game,v=0 for nearest version,v=other for specfil version<br/>             
-<hr/>
-Artist 04 ver_end 解锁资源<br/>
-?c=res_list&t=token&v=<br/>
-list ress in game,v=0 for nearest version,v=other for specfil version<br/>             
-<hr/>
-Artist 05 res_op 资源操作<br/>
-?c=res_list&t=token&v=<br/>
-list ress in game,v=0 for nearest version,v=other for specfil version<br/>             
-<hr/>
+<a>GET  ?c=get&f=""""&v=""""&p=1or0</a><br/>
+<a>下载一个文件</a><br/>
 </html>";
             _http_response_html(req, helpstr);
         }
@@ -318,6 +295,11 @@ list ress in game,v=0 for nearest version,v=other for specfil version<br/>
             tokens[info.token] = info;
             map.SetDictValue("status", 0);
             map.SetDictValue("token", info.token);
+
+            if(versions.ContainsKey(game)==false)
+            {
+                versions[game] = VersionGroup.Load(game,"games/" + game);
+            }
             return map.ToString();
         }
 
