@@ -6,6 +6,7 @@ namespace corelib
 {
     public partial class Server
     {
+        ServerConfig config = null;
         public static string ver
         {
             get
@@ -27,12 +28,20 @@ namespace corelib
         {
             this.logger = logger;
         }
-        public void Start(string url = "http://*:25080")
+        System.Security.Cryptography.SHA1 sha1= new System.Security.Cryptography.SHA1Managed();
+        public void Start(string url = "http://*:25080/")
         {
-
+            config = ServerConfig.Load();
+            config.Save();
             this.logger.Log_Warn("SourceSafe.light Server");
             this.logger.Log_Warn("ver=" + corelib.Server.ver);
-          _init_Script();
+            if(string.IsNullOrWhiteSpace( config.superadmin))
+            {
+                this.logger.Log_Error("superadmin has not found.read help and create one.");
+            }
+
+            _http_init(url);
+            _init_Script();
             this.logger.Log("type help() for more .");
         }
         public void Call(string cmd)
@@ -43,7 +52,7 @@ namespace corelib
                 var e = envScript.Expr_CompilerToken(t, true);
                 envScript.Expr_Execute(e);
             }
-            catch(Exception err)
+            catch (Exception err)
             {
                 logger.Log_Error("Sever error:" + err.ToString());
             }
@@ -80,4 +89,5 @@ namespace corelib
             logger.Log_Warn(str);
         }
     }
+
 }

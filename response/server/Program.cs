@@ -15,6 +15,7 @@ namespace server
             server.Start();
             while (true)
             {
+                Console.Write("->");
                 string line = Console.ReadLine();
                 if (string.IsNullOrWhiteSpace(line) == false)
                 {
