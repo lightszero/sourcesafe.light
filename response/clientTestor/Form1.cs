@@ -143,7 +143,7 @@ namespace clientTestor
             string url = textBox1.Text;
             try
             {
-                byte[] br = wc.DownloadData(url + "?c=rpc&s=" + Uri.EscapeDataString(textBox5.Text));
+                byte[] br = wc.DownloadData(url + "?c=rpc&s=" + Uri.EscapeDataString(textBox5.Text)+"&t="+textBox6.Text);
                 string returnstr = System.Text.Encoding.UTF8.GetString(br);
                 listBox1.Items.Add(new Log("ping result", returnstr));
                 listBox1.SelectedIndex = listBox1.Items.Count - 1;

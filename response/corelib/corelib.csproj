@@ -49,6 +49,8 @@
     <Compile Include="Server_Http_Download.cs" />
     <Compile Include="Server_Http.cs" />
     <Compile Include="Server_Script.cs" />
+    <Compile Include="Version\Version.cs" />
+    <Compile Include="Version\VersionGroup.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -146,7 +146,7 @@ namespace corelib
                             _http_cmd_get(req);
                             return;
                         case "rpc"://Get返回二进制格式
-                            strreturn = _http_cmd_rpc(req);
+                            strreturn = _http_cmd_rpc(req,postdata);
                             break;
                         case "play":
                             strreturn = _http_cmd_play(req);

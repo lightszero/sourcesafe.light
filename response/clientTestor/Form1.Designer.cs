@@ -39,9 +39,9 @@
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.button2 = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox5 = new System.Windows.Forms.TextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.button4 = new System.Windows.Forms.Button();
@@ -69,13 +69,13 @@
             // 
             this.textBox1.Location = new System.Drawing.Point(60, 10);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(328, 21);
+            this.textBox1.Size = new System.Drawing.Size(240, 21);
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = "http://localhost:25080/ss.light";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(394, 8);
+            this.button1.Location = new System.Drawing.Point(306, 10);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 2;
@@ -88,7 +88,7 @@
             this.textBox2.Location = new System.Drawing.Point(12, 200);
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(457, 150);
+            this.textBox2.Size = new System.Drawing.Size(366, 150);
             this.textBox2.TabIndex = 3;
             // 
             // listBox1
@@ -98,7 +98,7 @@
             this.listBox1.ItemHeight = 12;
             this.listBox1.Location = new System.Drawing.Point(3, 17);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(451, 137);
+            this.listBox1.Size = new System.Drawing.Size(363, 137);
             this.listBox1.TabIndex = 4;
             this.listBox1.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
@@ -107,7 +107,7 @@
             this.groupBox1.Controls.Add(this.listBox1);
             this.groupBox1.Location = new System.Drawing.Point(12, 37);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(457, 157);
+            this.groupBox1.Size = new System.Drawing.Size(369, 157);
             this.groupBox1.TabIndex = 5;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "log";
@@ -115,9 +115,9 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.splitContainer1);
-            this.groupBox2.Location = new System.Drawing.Point(475, 8);
+            this.groupBox2.Location = new System.Drawing.Point(387, 9);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(196, 173);
+            this.groupBox2.Size = new System.Drawing.Size(196, 185);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "gamelist";
@@ -136,8 +136,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.button2);
-            this.splitContainer1.Size = new System.Drawing.Size(190, 153);
-            this.splitContainer1.SplitterDistance = 124;
+            this.splitContainer1.Size = new System.Drawing.Size(190, 165);
+            this.splitContainer1.SplitterDistance = 133;
             this.splitContainer1.TabIndex = 0;
             // 
             // listBox2
@@ -147,7 +147,7 @@
             this.listBox2.ItemHeight = 12;
             this.listBox2.Location = new System.Drawing.Point(0, 0);
             this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(190, 124);
+            this.listBox2.Size = new System.Drawing.Size(190, 133);
             this.listBox2.TabIndex = 0;
             // 
             // button2
@@ -155,7 +155,7 @@
             this.button2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button2.Location = new System.Drawing.Point(0, 0);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(190, 25);
+            this.button2.Size = new System.Drawing.Size(190, 28);
             this.button2.TabIndex = 0;
             this.button2.Text = "gotgame";
             this.button2.UseVisualStyleBackColor = true;
@@ -166,28 +166,12 @@
             this.groupBox3.Controls.Add(this.button3);
             this.groupBox3.Controls.Add(this.textBox4);
             this.groupBox3.Controls.Add(this.textBox3);
-            this.groupBox3.Location = new System.Drawing.Point(476, 188);
+            this.groupBox3.Location = new System.Drawing.Point(390, 200);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(192, 122);
+            this.groupBox3.Size = new System.Drawing.Size(192, 150);
             this.groupBox3.TabIndex = 7;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "login";
-            // 
-            // textBox3
-            // 
-            this.textBox3.Location = new System.Drawing.Point(7, 21);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 21);
-            this.textBox3.TabIndex = 0;
-            this.textBox3.Text = "lights";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Location = new System.Drawing.Point(7, 49);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 21);
-            this.textBox4.TabIndex = 1;
-            this.textBox4.Text = "123456";
             // 
             // button3
             // 
@@ -199,11 +183,27 @@
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(7, 49);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(100, 21);
+            this.textBox4.TabIndex = 1;
+            this.textBox4.Text = "123456";
+            // 
+            // textBox3
+            // 
+            this.textBox3.Location = new System.Drawing.Point(7, 21);
+            this.textBox3.Name = "textBox3";
+            this.textBox3.Size = new System.Drawing.Size(100, 21);
+            this.textBox3.TabIndex = 0;
+            this.textBox3.Text = "lights";
+            // 
             // textBox5
             // 
             this.textBox5.Location = new System.Drawing.Point(12, 20);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(373, 21);
+            this.textBox5.Size = new System.Drawing.Size(354, 21);
             this.textBox5.TabIndex = 8;
             // 
             // groupBox4
@@ -212,14 +212,14 @@
             this.groupBox4.Controls.Add(this.textBox5);
             this.groupBox4.Location = new System.Drawing.Point(12, 384);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(457, 88);
+            this.groupBox4.Size = new System.Drawing.Size(369, 88);
             this.groupBox4.TabIndex = 9;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "rpc";
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(339, 48);
+            this.button4.Location = new System.Drawing.Point(291, 47);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
             this.button4.TabIndex = 9;
@@ -231,7 +231,7 @@
             // 
             this.textBox6.Location = new System.Drawing.Point(12, 357);
             this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(457, 21);
+            this.textBox6.Size = new System.Drawing.Size(366, 21);
             this.textBox6.TabIndex = 10;
             // 
             // Form1
