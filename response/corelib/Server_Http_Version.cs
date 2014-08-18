@@ -86,13 +86,20 @@ namespace corelib
             envRPC.RegType(new CSLE.RegHelper_Type(typeof(byte[]), "byte[]"));
 
             envRPC.RegFunction(new CSLE.RegHelper_Function(new RPC(_rpc_help), "help"));
-            envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int>(_rpc_ver_info), "ver_info"));
+
+            //组信息
+            envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int>(_rpc_group_info), "group_info"));
+            envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int>(_rpc_group_verdetail), "group_verdetail"));
+
+
+            //版本操作
             envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int, byte[]>(_rpc_ver_begin), "ver_begin"));
             envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int>(_rpc_ver_finish), "ver_finish"));
-            envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int>(_rpc_ver_cancel), "ver_finish"));
+            envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int>(_rpc_ver_cancel), "ver_cancel"));
             envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int, string, byte[]>(_rpc_ver_addfile), "ver_addfile"));
             envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int, string, byte[]>(_rpc_ver_updatefile), "ver_updatefile"));
             envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int, string>(_rpc_ver_deletefile), "ver_deletefile"));
+            envRPC.RegFunction(new CSLE.RegHelper_Function(new RPCJ<int, string, byte[]>(_rpc_ver_updatefilepro), "ver_updatefilepro"));
 
 
             this.logger.Log_Warn("Init script engine(for RPC):C#Light" + envScript.version);
@@ -136,7 +143,7 @@ namespace corelib
             return "help.";
         }
         //查询版本信息
-        MyJson.IJsonNode _rpc_ver_info(string token, int ver)
+        MyJson.IJsonNode _rpc_group_info(string token, int ver)
         {
             string user;
             string game = CheckToken(token, out user);
@@ -155,9 +162,43 @@ namespace corelib
             }
             return obj;
         }
+        MyJson.IJsonNode _rpc_group_verdetail(string token, int ver)
+        {
+            string user;
+            string game = CheckToken(token, out user);
+            var vgroup = versions[game];
+            if (ver == 0)
+            {
+                ver = vgroup.nowver;
+            }
+            MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+            obj.SetDictValue("nowver", vgroup.nowver);
+            obj.SetDictValue("reqver", ver);
+            Version v = vgroup.getVersion(ver);
+            if (v != null)
+            {
+                obj.SetDictValue("regverfilenum", v.reslist.Count);
+            }
+            return obj;
+        }
+        enum CMDType
+        {
+            Add,
+            Remove,
+            Update,
+            UpdatePro,
+        };
         class Cmd
         {
-
+            public Cmd(string filename, byte[] data, CMDType type)
+            {
+                this.filename = filename;
+                this.data = data;
+                this.type = type;
+            }
+            public string filename;
+            public byte[] data;
+            public CMDType type;
         }
         class AtomOP
         {
@@ -220,12 +261,18 @@ namespace corelib
                 return obj;
             }
             var commit = commits[user];
+            if (commit.ver != ver)
+            {
+                obj.SetDictValue("status", -2005);
+                obj.SetDictValue("msg", "not right commit ver.");
+                return obj;
+            }
             MyJson.JsonNode_Array array = new MyJson.JsonNode_Array();
             bool b = commit.Run(vgroup.path, array);
             obj.SetDictValue("info", array);
             if (!b)
             {
-                obj.SetDictValue("status", -2005);
+                obj.SetDictValue("status", -2006);
                 obj.SetDictValue("msg", "commit fall.");
 
             }
@@ -248,22 +295,115 @@ namespace corelib
             }
             else
             {
-                obj.SetDictValue("status", -2006);
+                obj.SetDictValue("status", -2007);
                 obj.SetDictValue("msg", "no need to cancel any.");
             }
             return null;
         }
         MyJson.IJsonNode _rpc_ver_addfile(string token, int ver, string filename, byte[] post)
         {
-            return null;
+            string user;
+            string game = CheckToken(token, out user);
+            var vgroup = versions[game];
+            MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+
+            if (commits.ContainsKey(user) == false)
+            {
+                obj.SetDictValue("status", -2004);
+                obj.SetDictValue("msg", "not found commit.");
+                return obj;
+            }
+            var commit = commits[user];
+            if (commit.ver != ver)
+            {
+                obj.SetDictValue("status", -2005);
+                obj.SetDictValue("msg", "not right commit ver.");
+                return obj;
+            }
+
+            commit.AddCmd(new Cmd(filename, post, CMDType.Add));
+            obj.SetDictValue("status", 0);
+
+            return obj;
         }
         MyJson.IJsonNode _rpc_ver_updatefile(string token, int ver, string filename, byte[] post)
         {
-            return null;
+            string user;
+            string game = CheckToken(token, out user);
+            var vgroup = versions[game];
+            MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+
+            if (commits.ContainsKey(user) == false)
+            {
+                obj.SetDictValue("status", -2004);
+                obj.SetDictValue("msg", "not found commit.");
+                return obj;
+            }
+            var commit = commits[user];
+            if (commit.ver != ver)
+            {
+                obj.SetDictValue("status", -2005);
+                obj.SetDictValue("msg", "not right commit ver.");
+                return obj;
+            }
+
+            commit.AddCmd(new Cmd(filename, post, CMDType.Update));
+            obj.SetDictValue("status", 0);
+
+            return obj;
         }
         MyJson.IJsonNode _rpc_ver_deletefile(string token, int ver, string filename)
         {
-            return null;
+            string user;
+            string game = CheckToken(token, out user);
+            var vgroup = versions[game];
+            MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+
+            if (commits.ContainsKey(user) == false)
+            {
+                obj.SetDictValue("status", -2004);
+                obj.SetDictValue("msg", "not found commit.");
+                return obj;
+            }
+            var commit = commits[user];
+            if (commit.ver != ver)
+            {
+                obj.SetDictValue("status", -2005);
+                obj.SetDictValue("msg", "not right commit ver.");
+                return obj;
+            }
+
+            commit.AddCmd(new Cmd(filename, null, CMDType.Remove));
+            obj.SetDictValue("status", 0);
+
+            return obj;
+        }
+
+        MyJson.IJsonNode _rpc_ver_updatefilepro(string token, int ver, string filename, byte[] post)
+        {
+            string user;
+            string game = CheckToken(token, out user);
+            var vgroup = versions[game];
+            MyJson.JsonNode_Object obj = new MyJson.JsonNode_Object();
+
+            if (commits.ContainsKey(user) == false)
+            {
+                obj.SetDictValue("status", -2004);
+                obj.SetDictValue("msg", "not found commit.");
+                return obj;
+            }
+            var commit = commits[user];
+            if (commit.ver != ver)
+            {
+                obj.SetDictValue("status", -2005);
+                obj.SetDictValue("msg", "not right commit ver.");
+                return obj;
+            }
+
+            commit.AddCmd(new Cmd(filename, post, CMDType.UpdatePro));
+            obj.SetDictValue("status", 0);
+
+            return obj;
         }
 
     }
