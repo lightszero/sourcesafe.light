@@ -23,11 +23,13 @@ namespace GitProxyServer
 
             cmdP.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
                 {
-                    list.Add(e.Data);
+                    if(e.Data!=null)
+                        list.Add(e.Data);
                 };
             cmdP.ErrorDataReceived += (object sender, DataReceivedEventArgs e) =>
             {
-                list.Add(e.Data);
+                if (e.Data != null)
+                    list.Add(e.Data);
             };
             cmdP.Start();
             cmdP.BeginOutputReadLine();
@@ -52,6 +54,7 @@ namespace GitProxyServer
         {
             foreach (var s in list)
             {
+                if (s == null) continue;
                 if (s.Contains(txt) && s.Contains(txt2)) return true;
             }
             return false;
@@ -201,6 +204,8 @@ namespace GitProxyServer
                         _response_callgit("data\\" + res, "push");
                     }
                     unpushfile.Clear();
+
+                    pushLast = DateTime.Now;
                 }
             }
         }

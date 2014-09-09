@@ -50,7 +50,7 @@ namespace GitProxyServer
                 _http_OnHttpIn(reqcontext, null);
             }
         }
-       static System.Security.Cryptography.SHA1 sha1 = new System.Security.Cryptography.SHA1Managed();
+        static System.Security.Cryptography.SHA1 sha1 = new System.Security.Cryptography.SHA1Managed();
         static void _http_OnHttpIn(System.Net.HttpListenerContext req, byte[] postdata)
         {
             try
@@ -59,6 +59,12 @@ namespace GitProxyServer
                 {
                     _http_download(req);
                     return;
+                }
+                else if (req.Request.Url.AbsolutePath == "/crossdomain.xml")
+                {
+                    string xmlr = "<?xml version=\"1.0\"?><cross-domain-policy><allow-access-from domain=\"*\" /></cross-domain-policy>";
+                    _http_response(req, xmlr);
+
                 }
                 else if (req.Request.Url.AbsolutePath == "/filepost")
                 {
@@ -70,21 +76,21 @@ namespace GitProxyServer
                     string hash = req.Request.QueryString["h"];
                     string len = req.Request.QueryString["l"];
                     byte[] data = postdata;
-                    if(int.Parse(len)!=data.Length)
+                    if (int.Parse(len) != data.Length)
                     {
                         strreturn = "{\"status\"=-1,\"msg\"=\"len 与数据不匹配\"";
                         _http_response(req, strreturn);
                         return;
                     }
                     string b64 = Convert.ToBase64String(sha1.ComputeHash(data));
-                    if(b64!=hash)
+                    if (b64 != hash)
                     {
                         strreturn = "{\"status\"=-1,\"msg\"=\"hash 与数据不匹配\"";
                         _http_response(req, strreturn);
                         return;
                     }
                     bool b = _response_Save(resp, file, data);
-                    if(b)
+                    if (b)
                     {
                         strreturn = "{\"status\"=0,\"msg\"=\"保存成功\"";
                         _http_response(req, strreturn);
