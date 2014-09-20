@@ -183,10 +183,6 @@ namespace GitProxyServer
                         if (cmds.TryDequeue(out cmd))
                         {
                             string path = "data\\" + cmd.response + "\\" + cmd.file;
-                            //检查要写入的路径是否存在
-                            string fp = System.IO.Path.GetDirectoryName(path);
-                            if (System.IO.Directory.Exists(fp) == false)
-                                System.IO.Directory.CreateDirectory(fp);
                             System.IO.File.WriteAllBytes(path, cmd.data);
                             if (unpushfile.ContainsKey(cmd.response) == false)
                             {
