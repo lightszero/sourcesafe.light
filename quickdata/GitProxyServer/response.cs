@@ -23,10 +23,12 @@ namespace GitProxyServer
 
             cmdP.OutputDataReceived += (object sender, DataReceivedEventArgs e) =>
                 {
-                    list.Add(e.Data);
+                    if(e.Data!=null)
+                     list.Add(e.Data);
                 };
             cmdP.ErrorDataReceived += (object sender, DataReceivedEventArgs e) =>
             {
+                if (e.Data != null)
                 list.Add(e.Data);
             };
             cmdP.Start();
@@ -42,6 +44,7 @@ namespace GitProxyServer
         }
         static bool HaveString(IList<string> list, string txt)
         {
+            if (txt == null) return false;
             foreach (var s in list)
             {
                 if (s.Contains(txt)) return true;
@@ -50,6 +53,7 @@ namespace GitProxyServer
         }
         static bool HaveString(IList<string> list, string txt, string txt2)
         {
+            if (txt == null) return false;
             foreach (var s in list)
             {
                 if (s.Contains(txt) && s.Contains(txt2)) return true;
