@@ -150,13 +150,16 @@ namespace WindowsFormsApplication1
         {
             try
             {
-                string url = textBox1.Text = textUrl.Text + "userinfo.php" + "?username=" + textUser.Text;
+                string url = textBox1.Text = textUrl.Text + "userinfo.php" + "?userid=" + textUserID.Text;
                 string str = wc.DownloadString(url);
                 var json = MyJson.Parse(str);
 
-                StringBuilder sb = new StringBuilder();
-                json.ConvertToStringWithFormat(sb,0);
-                textBox6.Text = sb.ToString();
+                textBox6.Text = "";
+                foreach (var v in json.asDict()["json"].AsList())
+                {
+                    textBox6.Text += v + "\n";
+                }
+
             }
             catch (Exception err)
             {
@@ -168,7 +171,7 @@ namespace WindowsFormsApplication1
         {
             try
             {
-                string url = textBox1.Text = textUrl.Text + "updatejson.php" + "?username=" + textUser.Text + "&password=" + textPassword.Text
+                string url = textBox1.Text = textUrl.Text + "updatejson.php" + "?userid=" + textUserID.Text + "&password=" + textPassword.Text
                     + "&tag=" + textTag.Text;
                 string str = wc.DownloadString(url);
                 textBox6.Text = str;
